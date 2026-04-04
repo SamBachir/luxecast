@@ -1,0 +1,33 @@
+version: '3.9'
+
+services:
+  app:
+    image: php:8.2-cli
+    container_name: luxecast-app
+    working_dir: /var/www
+    volumes:
+      - ../backend/laravel-api:/var/www
+    ports:
+      - "8000:8000"
+    command: php -S 0.0.0.0:8000 -t public
+
+  postgres:
+    image: postgres:16
+    container_name: luxecast-postgres
+    environment:
+      POSTGRES_DB: luxecast
+      POSTGRES_USER: luxecast
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: luxecast-redis
+    ports:
+      - "6379:6379"
+
+volumes:
+  postgres_data:
